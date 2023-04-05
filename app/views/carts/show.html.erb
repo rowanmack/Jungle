@@ -4,6 +4,14 @@
     <h1>My Cart</h1>
   </header>
 
+  <% if cart_subtotal_cents == 0 %>
+  <div class="alert alert-danger">Your cart is empty! Head back to our products page to add some plants.
+  </div>
+  <a href='/'>Explore Our Products</a>
+   
+  
+
+  <% else %>
   <div class="panel panel-default items">
     <table class="table table-bordered">
       <thead>
@@ -48,5 +56,6 @@
       <% end %>
     </div>
   </div>
+  <% end %>
 
 </section>
