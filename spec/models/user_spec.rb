@@ -57,8 +57,36 @@ RSpec.describe User, type: :model do
 
       expect(@user2).to_not be_valid
     end
+  end
 
+  describe '.authenticate_with_credentials' do
 
+    it "should be valid with space before email" do
+      @user = User.create(name: "Rowan Mackenzie", email: "row.mackenzie@gmail.com", password: "123123", password_confirmation: "123123")
 
+      @authenticated_user = User.authenticate_with_credentials('   row.mackenzie@gmail.com   ', "123123")
+      expect(@authenticated_user).to_not be_nil
+    end
+
+    it "should be valid regardless of case" do
+      @user = User.create(name: "Rowan Mackenzie", email: "row.mackenzie@gmail.com", password: "123123", password_confirmation: "123123")
+
+      @authenticated_user = User.authenticate_with_credentials('rOw.MaCkEnzIe@gmail.Com', "123123")
+      expect(@authenticated_user).to_not be_nil
+    end
+
+    it 'should return nil if password is incorrect' do
+      @user = User.create(name: "Rowan Mackenzie", email: "row.mackenzie@gmail.com", password: "123123", password_confirmation: "123123")
+
+      @authenticated_user = User.authenticate_with_credentials("row.mackenzie@gmail.com", "456456")
+      expect(@authenticated_user).to be_nil
+    end
+
+    it "should return nil if email and password do not match" do
+      @user = User.create(name: "Rowan Mackenzie", email: "row.mackenzie@gmail.com", password: "123123", password_confirmation: "123123")
+
+      @authenticated_user = User.authenticate_with_credentials('sample@samp.com', "password")
+      expect(@authenticated_user).to be_nil
+    end
   end
 end

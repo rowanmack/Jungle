@@ -8,5 +8,13 @@ class User < ApplicationRecord
   validates :password, presence: true, :length => {:within => 6..40}
   validates :password_confirmation, presence: true
 
-  
+ 
+  def self.authenticate_with_credentials email, password
+    email = email.downcase.strip
+    user = User.find_by_email(email)
+      if user && user.authenticate(password)
+        return user
+      end 
+    return nil
+  end
 end
